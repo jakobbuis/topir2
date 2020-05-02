@@ -20,7 +20,7 @@ class WebhookTest extends TestCase
     /** @test */
     public function itAlwaysRespondsWith200Ok()
     {
-        $response = $this->withHeader('X-Todoist-Hmac-SHA256', 'MzgxNDQ2ZWU5MzMxYWUxMzMzNmQ0NGMxYWExODNhNjczOGI5NGM0ZTJkNmI4MGU1ZjFiZTM0NjRmYTU4ODlhNA==')
+        $response = $this->withHeader('X-Todoist-Hmac-SHA256', 'OBRG7pMxrhMzbUTBqhg6Zzi5TE4ta4Dl8b40ZPpYiaQ=')
             ->postJson(route('webhook'), ['foo' => 'bar']);
 
         $response->assertOk();
@@ -31,7 +31,7 @@ class WebhookTest extends TestCase
     {
         $this->assertCount(0, Event::all());
 
-        $response = $this->withHeader('X-Todoist-Hmac-SHA256', 'MzgxNDQ2ZWU5MzMxYWUxMzMzNmQ0NGMxYWExODNhNjczOGI5NGM0ZTJkNmI4MGU1ZjFiZTM0NjRmYTU4ODlhNA==')
+        $response = $this->withHeader('X-Todoist-Hmac-SHA256', 'OBRG7pMxrhMzbUTBqhg6Zzi5TE4ta4Dl8b40ZPpYiaQ=')
             ->postJson(route('webhook'), ['foo' => 'bar']);
 
         $this->assertCount(1, Event::all());
@@ -49,7 +49,7 @@ class WebhookTest extends TestCase
     /** @test */
     public function payloadsWithInvalidSignaturesAreRejected()
     {
-        $response = $this->withHeader('X-Todoist-Hmac-SHA256', 'MzgxNDQ2ZWU5MzMxYWUxMzMzNmQ0NGMxYWExODNhNjczOGI5NGM0ZTJkNmI4MGU1ZjFiZTM0NjRmYTU4ODlhNA==')
+        $response = $this->withHeader('X-Todoist-Hmac-SHA256', 'OBRG7pMxrhMzbUTBqhg6Zzi5TE4ta4Dl8b40ZPpYiaQ=')
             ->postJson(route('webhook'), ['bar' => 'foo']); // Change the payload to invalidate the key
 
         $response->assertForbidden();
