@@ -19,7 +19,7 @@ class WebhookController extends Controller
         }
 
         // Verify the signature
-        $expectedSignature = base64_encode(hash_hmac('sha256', $request->getContent(), config('services.todoist.client_secret')));
+        $expectedSignature = base64_encode(hash_hmac('sha256', $request->getContent(), config('services.todoist.client_secret'), true));
         if (!hash_equals($expectedSignature, $signature)) {
             Log::warning('Rejected webhook payload with invalid signature', [
                 'payload' => $request->getContent(),
