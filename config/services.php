@@ -30,4 +30,10 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'todoist' => [
+        'client_id' => env('TODOIST_OAUTH_CLIENT_ID'),
+        'client_secret' => env('TODOIST_OAUTH_CLIENT_SECRET'),
+        'redirect' => env('TODOIST_OAUTH_REDIRECT'),
+    ],
+
 ];
