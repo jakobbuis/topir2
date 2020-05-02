@@ -12,6 +12,9 @@ class WebhookTest extends TestCase
     {
         parent::setUp();
 
+        // Prevent updating projections
+        \Illuminate\Support\Facades\Event::fake();
+
         // Set the client secret to a predictable value to enable hardcoding
         // HMAC headers
         Config::set('services.todoist.client_secret', '1234');
