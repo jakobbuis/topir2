@@ -20,6 +20,14 @@ class Counts extends Model
         $entry->save();
     }
 
+    public static function rehydrate(): void
+    {
+        Counts::truncate();
+        $events = Event::all()->each(function ($event) {
+            Counts::updateProjection($event);
+        });
+    }
+
     public static function last30Days(): array
     {
         $day = Carbon::now()->subDays(30)->startOfday();
