@@ -3,14 +3,25 @@
 namespace Tests\Feature;
 
 use App\Event;
+use Illuminate\Support\Facades\Config;
 use Tests\TestCase;
 
 class WebhookTest extends TestCase
 {
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        // Set the client secret to a predictable value to enable hardcoding
+        // HMAC headers
+        Config::set('services.todoist.client_secret', '1234');
+    }
+
     /** @test */
     public function itAlwaysRespondsWith200Ok()
     {
-        $response = $this->post(route('webhook'));
+        $response = $this->withHeader('X-Todoist-Hmac-SHA256', 'MzgxNDQ2ZWU5MzMxYWUxMzMzNmQ0NGMxYWExODNhNjczOGI5NGM0ZTJkNmI4MGU1ZjFiZTM0NjRmYTU4ODlhNA==')
+            ->postJson(route('webhook'), ['foo' => 'bar']);
 
         $response->assertOk();
     }
@@ -20,9 +31,27 @@ class WebhookTest extends TestCase
     {
         $this->assertCount(0, Event::all());
 
-        $this->postJson(route('webhook'), ['foo' => 'bar']);
+        $response = $this->withHeader('X-Todoist-Hmac-SHA256', 'MzgxNDQ2ZWU5MzMxYWUxMzMzNmQ0NGMxYWExODNhNjczOGI5NGM0ZTJkNmI4MGU1ZjFiZTM0NjRmYTU4ODlhNA==')
+            ->postJson(route('webhook'), ['foo' => 'bar']);
 
         $this->assertCount(1, Event::all());
         $this->assertEquals('bar', Event::first()->data->foo);
+    }
+
+    /** @test */
+    public function payloadsWithoutAValidSignatureAreRejected()
+    {
+        $response = $this->post(route('webhook'), ['foo' => 'bar']);
+
+        $response->assertForbidden();
+    }
+
+    /** @test */
+    public function payloadsWithInvalidSignaturesAreRejected()
+    {
+        $response = $this->withHeader('X-Todoist-Hmac-SHA256', 'MzgxNDQ2ZWU5MzMxYWUxMzMzNmQ0NGMxYWExODNhNjczOGI5NGM0ZTJkNmI4MGU1ZjFiZTM0NjRmYTU4ODlhNA==')
+            ->postJson(route('webhook'), ['bar' => 'foo']); // Change the payload to invalidate the key
+
+        $response->assertForbidden();
     }
 }
