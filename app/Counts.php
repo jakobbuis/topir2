@@ -34,9 +34,9 @@ class Counts extends Model
         $today = Carbon::now()->startOfday();
 
         $results = [];
-        while ($day <= $today) {
+        while ($day < $today) {
             $entry = Counts::where('date', $day->format('Y-m-d'))->first();
-            $results[$day->format('Y-m-d')] = (int) ($entry->completed ?? 0);
+            $results[] = (int) ($entry->completed ?? 0);
             $day->addDay();
         }
 
