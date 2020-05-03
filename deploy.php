@@ -22,6 +22,8 @@ task('build:frontend', function () {
 before('deploy:symlink', 'build:frontend');
 
 // Production
-host('topir.jakobbuis.nl')
+host('production')
+    ->hostname('topir.jakobbuis.nl')
+    ->user('jakob')
     ->stage('production')
     ->set('deploy_path', '/srv/topir2/');
