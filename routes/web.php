@@ -4,4 +4,6 @@
 Route::get('login/todoist', 'Auth\LoginController@redirectToProvider');
 Route::get('login/todoist/callback', 'Auth\LoginController@handleProviderCallback');
 
-Route::get('/', 'DashboardController');
+Route::middleware('auth.basic')->group(function () {
+    Route::get('/', 'DashboardController');
+});
