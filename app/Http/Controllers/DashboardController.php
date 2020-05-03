@@ -11,6 +11,7 @@ class DashboardController extends Controller
     {
         return view('dashboard', [
             'completed' => Counts::last30Days(),
+            'completed_p1' => Counts::last30DaysP1(),
         ]);
     }
 }
