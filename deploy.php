@@ -26,4 +26,5 @@ host('production')
     ->hostname('topir.jakobbuis.nl')
     ->user('jakob')
     ->stage('production')
+    ->set('keep_releases', 3)
     ->set('deploy_path', '/srv/topir2/');
