@@ -10,7 +10,6 @@ var todoistChart = new Chart(todoistElement, {
     type: 'bar',
     data: {
         labels: [
-            moment().subtract(30, 'd').format('ddd'),
             moment().subtract(29, 'd').format('ddd'),
             moment().subtract(28, 'd').format('ddd'),
             moment().subtract(27, 'd').format('ddd'),

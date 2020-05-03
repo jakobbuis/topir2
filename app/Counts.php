@@ -30,11 +30,11 @@ class Counts extends Model
 
     public static function last30Days(): array
     {
-        $day = Carbon::now()->subDays(30)->startOfday();
+        $day = Carbon::now()->subDays(29)->startOfday();
         $today = Carbon::now()->startOfday();
 
         $results = [];
-        while ($day < $today) {
+        while ($day <= $today) {
             $entry = Counts::where('date', $day->format('Y-m-d'))->first();
             $results[] = (int) ($entry->completed ?? 0);
             $day->addDay();
