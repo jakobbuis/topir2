@@ -12,6 +12,15 @@ set('allow_anonymous_stats', false);
 // Always migrate database
 before('deploy:symlink', 'artisan:migrate');
 
+// Always build production assets
+task('build:frontend', function () {
+    within('{{release_path}}', function () {
+        run('npm ci');
+        run('npm run production');
+    });
+});
+before('deploy:symlink', 'build:frontend');
+
 // Production
 host('topir.jakobbuis.nl')
     ->stage('production')
