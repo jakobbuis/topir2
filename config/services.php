@@ -34,6 +34,7 @@ return [
         'client_id' => env('TODOIST_OAUTH_CLIENT_ID'),
         'client_secret' => env('TODOIST_OAUTH_CLIENT_SECRET'),
         'redirect' => env('TODOIST_OAUTH_REDIRECT'),
+        'api_token' => env('TODOIST_API_TOKEN'),
     ],
 
 ];
