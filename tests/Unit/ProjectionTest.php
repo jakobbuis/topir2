@@ -14,9 +14,9 @@ class ProjectionTest extends TestCase
     {
         Carbon::setTestNow('03-01-2020');
 
-        Event::create(['data' => (object) ['date_added' => '2020-01-01T08:00:00Z', 'event_name' => 'item:completed']]);
-        Event::create(['data' => (object) ['date_added' => '2020-01-02T08:00:00Z', 'event_name' => 'item:completed']]);
-        Event::create(['data' => (object) ['date_added' => '2020-01-02T08:00:00Z', 'event_name' => 'item:completed']]);
+        Event::create(['data' => (object) ['event_data' => (object) [ 'date_completed' => '2020-01-01T08:00:00Z'], 'event_name' => 'item:completed']]);
+        Event::create(['data' => (object) ['event_data' => (object) [ 'date_completed' => '2020-01-02T08:00:00Z'], 'event_name' => 'item:completed']]);
+        Event::create(['data' => (object) ['event_data' => (object) [ 'date_completed' => '2020-01-02T08:00:00Z'], 'event_name' => 'item:completed']]);
 
         $this->assertEquals(
             [
@@ -35,8 +35,8 @@ class ProjectionTest extends TestCase
 
         \Illuminate\Support\Facades\Event::fake();
 
-        Event::create(['data' => (object) ['date_added' => '2020-01-02T08:00:00Z', 'event_name' => 'item:completed']]);
-        Event::create(['data' => (object) ['date_added' => '2020-01-02T08:00:00Z', 'event_name' => 'item:completed']]);
+        Event::create(['data' => (object) ['event_data' => (object) [ 'date_completed' => '2020-01-02T08:00:00Z'], 'event_name' => 'item:completed']]);
+        Event::create(['data' => (object) ['event_data' => (object) [ 'date_completed' => '2020-01-02T08:00:00Z'], 'event_name' => 'item:completed']]);
 
         $this->assertEquals(0, Counts::count());
 

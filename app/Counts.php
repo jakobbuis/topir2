@@ -14,7 +14,7 @@ class Counts extends Model
             return;
         }
 
-        $date = (new Carbon($event->data->date_added))->format('Y-m-d');
+        $date = (new Carbon($event->data->event_data->date_completed))->format('Y-m-d');
         $entry = Counts::firstOrCreate(['date' => $date]); // ensure the record exists
         $entry->completed += 1;
         $entry->save();
