@@ -48,7 +48,7 @@ var todoistChart = new Chart(todoistElement, {
                 data: JSON.parse(todoistElement.dataset.completed),
             },
             {
-                backgroundColor: '#38B2AC',
+                backgroundColor: '#E53E3E',
                 data: JSON.parse(todoistElement.dataset.completedP1),
             },
         ],
