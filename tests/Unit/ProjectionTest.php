@@ -48,6 +48,23 @@ class ProjectionTest extends TestCase
     }
 
     /** @test */
+    public function rehydrationResetsTheProjection()
+    {
+        Carbon::setTestNow('03-01-2020');
+
+        $this->createEvent('2020-01-02', 1);
+        $this->createEvent('2020-01-02', 2);
+
+        $this->assertEquals(1, Counts::count());
+
+        Event::all()->each->delete();
+
+        Counts::rehydrate();
+
+        $this->assertEquals(0, Counts::count());
+    }
+
+    /** @test */
     public function itRecordsP1CompletionsSeparately()
     {
         Carbon::setTestNow('03-01-2020');
