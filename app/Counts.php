@@ -10,15 +10,19 @@ class Counts extends Model
 {
     public static function updateProjection(Event $event): void
     {
-        if ($event->data->event_name !== 'item:completed') {
-            return;
+        if ($event->data->event_name === 'item:completed') {
+            $date = (new Carbon($event->data->event_data->date_completed))->format('Y-m-d');
+            $entry = Counts::firstOrCreate(['date' => $date]); // ensure the record exists
+            $entry->completed += 1;
+            $entry->completed_p1 += (int) $event->data->event_data->priority === 4;
+            $entry->save();
         }
 
-        $date = (new Carbon($event->data->event_data->date_completed))->format('Y-m-d');
-        $entry = Counts::firstOrCreate(['date' => $date]); // ensure the record exists
-        $entry->completed += 1;
-        $entry->completed_p1 += (int) $event->data->event_data->priority === 4;
-        $entry->save();
+        if ($event->data->event_name === 'topir:migration') {
+            $entry = Counts::firstOrCreate(['date' => $event->data->date]);
+            $entry->completed += $event->data->completed;
+            $entry->save();
+        }
     }
 
     public static function rehydrate(): void
