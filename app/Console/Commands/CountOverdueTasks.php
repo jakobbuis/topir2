@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Overdue;
+use App\Event;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Console\Command;
@@ -31,8 +31,12 @@ class CountOverdueTasks extends Command
 
         // Store count as an daily entry
         Log::info('Counted overdue tasks', compact('count'));
-        $entry = Overdue::firstOrCreate(['date' => Carbon::yesterday()]);
-        $entry->count = $count;
-        $entry->save();
+        Event::create([
+            'data' => (object) [
+                'event_name' => 'topir:overdue-count',
+                'date' => Carbon::yesterday(),
+                'overdue' => $count,
+            ],
+        ]);
     }
 }
