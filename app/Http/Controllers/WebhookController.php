@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Event;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
@@ -29,7 +30,14 @@ class WebhookController extends Controller
             abort(403);
         }
 
-        Event::create(['data' => $request->all()]);
+        // Completing a recurring tasks sets the `date_completed` parameter of the event to null
+        // Use the current datetime to fix that here
+        $eventData = $request->all();
+        if (isset($eventData['event_name']) && $eventData['event_name'] ===  'item:completed') {
+            $eventData['event_data']['date_completed'] ??= Carbon::now()->toISO8601String();
+        }
+
+        Event::create(['data' => $eventData]);
         return response(null, 200);
     }
 }

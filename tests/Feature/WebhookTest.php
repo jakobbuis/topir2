@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Event;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Config;
 use Tests\TestCase;
 
@@ -58,6 +59,48 @@ class WebhookTest extends TestCase
             ->postJson(route('webhook'), ['foo' => 'bar']);
 
         $response->assertForbidden();
+    }
+
+    /** @test */
+    public function payloadsWithDateCompletedAreAcceptedAsIs()
+    {
+        Carbon::setTestNow('2020-05-03 08:00:00');
+
+        $this->assertCount(0, Event::all());
+
+        $payload = [
+            'event_data' => (object) [
+                'date_completed' => '2020-05-01T08:00:00Z',
+            ],
+            'event_name' => 'item:completed',
+        ];
+        $response = $this->withHeader('X-Todoist-Hmac-SHA256', $this->validHMAC($payload))
+            ->postJson(route('webhook'), $payload);
+
+        $response->assertOk();
+        $this->assertCount(1, Event::all());
+        $this->assertEquals('2020-05-01T08:00:00Z', Event::first()->data->event_data->date_completed);
+    }
+
+    /** @test */
+    public function payloadsWithMissingDateCompletedAreFilledIn()
+    {
+        Carbon::setTestNow('2020-05-03 08:00:00');
+
+        $this->assertCount(0, Event::all());
+
+        $payload = [
+            'event_data' => (object) [
+                'date_completed' => null,
+            ],
+            'event_name' => 'item:completed',
+        ];
+        $response = $this->withHeader('X-Todoist-Hmac-SHA256', $this->validHMAC($payload))
+            ->postJson(route('webhook'), $payload);
+
+        $response->assertOk();
+        $this->assertCount(1, Event::all());
+        $this->assertEquals('2020-05-03T08:00:00+00:00', Event::first()->data->event_data->date_completed);
     }
 
     /**
