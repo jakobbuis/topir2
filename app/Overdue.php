@@ -3,9 +3,8 @@
 namespace App;
 
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
 
-class Overdue extends Model
+class Overdue extends Projection
 {
     protected $table = 'overdue';
 
@@ -16,14 +15,6 @@ class Overdue extends Model
             $entry->count += $event->data->overdue;
             $entry->save();
         }
-    }
-
-    public static function rehydrate(): void
-    {
-        Overdue::truncate();
-        $events = Event::all()->each(function ($event) {
-            Overdue::updateProjection($event);
-        });
     }
 
     public static function last30Days(): array

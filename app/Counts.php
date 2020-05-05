@@ -2,11 +2,9 @@
 
 namespace App;
 
-use App\Event;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Model;
 
-class Counts extends Model
+class Counts extends Projection
 {
     public static function updateProjection(Event $event): void
     {
@@ -23,14 +21,6 @@ class Counts extends Model
             $entry->completed += $event->data->completed;
             $entry->save();
         }
-    }
-
-    public static function rehydrate(): void
-    {
-        Counts::truncate();
-        $events = Event::all()->each(function ($event) {
-            Counts::updateProjection($event);
-        });
     }
 
     public static function last30Days(): array
