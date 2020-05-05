@@ -23,8 +23,9 @@ class WebhookTest extends TestCase
     /** @test */
     public function itAlwaysRespondsWith200Ok()
     {
-        $response = $this->withHeader('X-Todoist-Hmac-SHA256', 'OBRG7pMxrhMzbUTBqhg6Zzi5TE4ta4Dl8b40ZPpYiaQ=')
-            ->postJson(route('webhook'), ['foo' => 'bar']);
+        $payload = ['foo' => 'bar'];
+        $response = $this->withHeader('X-Todoist-Hmac-SHA256', $this->validHMAC($payload))
+            ->postJson(route('webhook'), $payload);
 
         $response->assertOk();
     }
@@ -34,8 +35,9 @@ class WebhookTest extends TestCase
     {
         $this->assertCount(0, Event::all());
 
-        $response = $this->withHeader('X-Todoist-Hmac-SHA256', 'OBRG7pMxrhMzbUTBqhg6Zzi5TE4ta4Dl8b40ZPpYiaQ=')
-            ->postJson(route('webhook'), ['foo' => 'bar']);
+        $payload = ['foo' => 'bar'];
+        $response = $this->withHeader('X-Todoist-Hmac-SHA256', $this->validHMAC($payload))
+            ->postJson(route('webhook'), $payload);
 
         $this->assertCount(1, Event::all());
         $this->assertEquals('bar', Event::first()->data->foo);
@@ -52,9 +54,17 @@ class WebhookTest extends TestCase
     /** @test */
     public function payloadsWithInvalidSignaturesAreRejected()
     {
-        $response = $this->withHeader('X-Todoist-Hmac-SHA256', 'OBRG7pMxrhMzbUTBqhg6Zzi5TE4ta4Dl8b40ZPpYiaQ=')
-            ->postJson(route('webhook'), ['bar' => 'foo']); // Change the payload to invalidate the key
+        $response = $this->withHeader('X-Todoist-Hmac-SHA256', $this->validHMAC(['foo' => null]))
+            ->postJson(route('webhook'), ['foo' => 'bar']);
 
         $response->assertForbidden();
+    }
+
+    /**
+     * Calculate the valid HMAC for a payload
+     */
+    private function validHMAC(array $payload): string
+    {
+        return base64_encode(hash_hmac('sha256', json_encode($payload), '1234', true));
     }
 }
