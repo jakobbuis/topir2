@@ -7,7 +7,7 @@ use App\Event;
 use Carbon\Carbon;
 use Tests\TestCase;
 
-class ProjectionTest extends TestCase
+class CountsProjectionTest extends TestCase
 {
     /** @test */
     public function itKeepsAProjectionOfDailyCompletedTasks()

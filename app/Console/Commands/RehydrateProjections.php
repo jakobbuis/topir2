@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Counts;
+use App\Overdue;
 use Illuminate\Console\Command;
 
 class RehydrateProjections extends Command
@@ -13,5 +14,6 @@ class RehydrateProjections extends Command
     public function handle()
     {
         Counts::rehydrate();
+        Overdue::rehydrate();
     }
 }
