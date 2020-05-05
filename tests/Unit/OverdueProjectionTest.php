@@ -61,7 +61,25 @@ class OverdueProjectionTest extends TestCase
         $this->assertEquals(0, Overdue::count());
     }
 
-    private function createEvent(string $date, int $overdueCount): void
+    /** @test */
+    public function nullOverdueAreTreatedAsZero()
+    {
+        Carbon::setTestNow('03-01-2020');
+
+        $this->createEvent('2020-01-02', 2);
+        $this->createEvent('2020-01-01', null);
+
+        $this->assertEquals(
+            [
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 2, 0,
+            ],
+            Overdue::last30Days()
+        );
+    }
+
+    private function createEvent(string $date, $overdueCount): void
     {
         Event::create([
             'data' => (object) [
