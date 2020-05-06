@@ -34,7 +34,7 @@ class CountOverdueTasks extends Command
         Event::create([
             'data' => (object) [
                 'event_name' => 'topir:overdue-count',
-                'date' => Carbon::yesterday(),
+                'date' => Carbon::yesterday()->format('Y-m-d'),
                 'overdue' => $count,
             ],
         ]);
