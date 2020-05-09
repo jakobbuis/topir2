@@ -14,12 +14,7 @@ class WebhookController extends Controller
     {
         $this->verifyRequestSignature($request);
 
-        // Completing a recurring tasks sets the `date_completed` parameter of the event to null
-        // Use the current datetime to fix that here
-        $eventData = $request->all();
-        if (isset($eventData['event_name']) && $eventData['event_name'] ===  'item:completed') {
-            $eventData['event_data']['date_completed'] ??= Carbon::now()->toISO8601String();
-        }
+        $eventData = $this->completeEvent($request->all());
 
         Event::create(['data' => $eventData]);
         return response(null, 200);
@@ -45,5 +40,21 @@ class WebhookController extends Controller
             ]);
             abort(403);
         }
+    }
+
+    private function completeEvent(array $event): array
+    {
+        // Completing a recurring tasks sets the `date_completed` parameter of the event to null
+        // Insert the current datetime to fix that.
+        if (isset($event['event_name']) && $event['event_name'] ===  'item:completed') {
+            $event['event_data']['date_completed'] ??= Carbon::now()->toISO8601String();
+        }
+
+        // Uncompleting tasks events come without a date added
+        if (isset($event['event_name']) && $event['event_name'] ===  'item:uncompleted') {
+            $event['event_data']['date_uncompleted'] ??= Carbon::now()->toISO8601String();
+        }
+
+        return $event;
     }
 }

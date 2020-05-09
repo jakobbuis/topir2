@@ -103,6 +103,25 @@ class WebhookTest extends TestCase
         $this->assertEquals('2020-05-03T08:00:00+00:00', Event::first()->data->event_data->date_completed);
     }
 
+    /** @test */
+    public function itemsUncompletedHaveTheirDateAdded()
+    {
+        Carbon::setTestNow('2020-05-03 08:00:00');
+
+        $this->assertCount(0, Event::all());
+
+        $payload = [
+            'event_data' => (object) [],
+            'event_name' => 'item:uncompleted',
+        ];
+        $response = $this->withHeader('X-Todoist-Hmac-SHA256', $this->validHMAC($payload))
+            ->postJson(route('webhook'), $payload);
+
+        $response->assertOk();
+        $this->assertCount(1, Event::all());
+        $this->assertEquals('2020-05-03T08:00:00+00:00', Event::first()->data->event_data->date_uncompleted);
+    }
+
     /**
      * Calculate the valid HMAC for a payload
      */
