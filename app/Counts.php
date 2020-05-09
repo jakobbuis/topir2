@@ -16,6 +16,13 @@ class Counts extends Projection
             $entry->save();
         }
 
+        if ($event->data->event_name === 'item:uncompleted') {
+            $date = (new Carbon($event->data->event_data->date_uncompleted))->format('Y-m-d');
+            $entry = Counts::firstOrCreate(['date' => $date]); // ensure the record exists
+            $entry->completed -= 1;
+            $entry->save();
+        }
+
         if ($event->data->event_name === 'topir:migration') {
             $entry = Counts::firstOrCreate(['date' => $event->data->date]);
             $entry->completed += $event->data->completed;

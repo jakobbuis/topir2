@@ -86,6 +86,30 @@ class CountsProjectionTest extends TestCase
         );
     }
 
+    /** @test */
+    public function itemsCanBeUncompleted()
+    {
+        Carbon::setTestNow('03-01-2020');
+
+        $this->createEvent('2020-01-01', 1);
+        $this->createEvent('2020-01-01', 1);
+
+        $this->assertCount(1, Counts::all());
+        $this->assertEquals(2, Counts::first()->completed);
+
+        Event::create([
+            'data' => (object) [
+                'event_data' => (object) [
+                    'date_uncompleted' => '2020-01-01T08:00:00Z',
+                    'priority' => 4,
+                ],
+                'event_name' => 'item:uncompleted',
+            ],
+        ]);
+
+        $this->assertEquals(1, Counts::first()->completed);
+    }
+
     private function createEvent(string $date, int $priority): void
     {
         Event::create([
