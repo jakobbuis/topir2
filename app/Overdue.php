@@ -11,7 +11,8 @@ class Overdue extends Projection
     public static function updateProjection(Event $event): void
     {
         if (in_array($event->data->event_name, ['topir:overdue-count', 'topir:migration'])) {
-            $entry = Overdue::firstOrCreate(['date' => $event->data->date]);
+            $date = new Carbon($event->data->date)->format('Y-m-d');
+            $entry = Overdue::firstOrCreate(['date' => $date]);
             $entry->count += $event->data->overdue;
             $entry->save();
         }
