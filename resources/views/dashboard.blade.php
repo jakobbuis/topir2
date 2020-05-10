@@ -16,7 +16,8 @@
         </header>
         <canvas id="todoist" width="10" height="10"
             data-completed="{{ json_encode($completed) }}"
-            data-completed-p1="{{ json_encode($completed_p1) }}"></canvas>
+            data-completed-p1="{{ json_encode($completed_p1) }}"
+            data-overdue="{{ json_encode($overdue) }}"></canvas>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
