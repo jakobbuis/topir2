@@ -53,7 +53,7 @@ var todoistChart = new Chart(todoistElement, {
             },
             {
                 backgroundColor: '#E53E3E',
-                data: JSON.parse(todoistElement.dataset.overdue),
+                data: JSON.parse(todoistElement.dataset.overdue).map(x => -x),
             },
         ],
     },
