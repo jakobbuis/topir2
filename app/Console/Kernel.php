@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Console\Commands\CountOverdueTasks;
+use App\Console\Commands\RehydrateProjections;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -26,6 +27,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command(CountOverdueTasks::class)->dailyAt('00:15');
+        $schedule->command(RehydrateProjections::class)->dailyAt('04:00');
     }
 
     /**
