@@ -3,6 +3,7 @@
 namespace App;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class Counts extends Projection
 {
@@ -14,6 +15,7 @@ class Counts extends Projection
             $entry->completed += 1;
             $entry->completed_p1 += (int) $event->data->event_data->priority === 4;
             $entry->save();
+            Log::debug("Count completed task", ['date' => $date, 'task' => $event->data->event_data->content]);
         }
 
         if ($event->data->event_name === 'item:uncompleted') {
@@ -21,12 +23,14 @@ class Counts extends Projection
             $entry = Counts::firstOrCreate(['date' => $date]); // ensure the record exists
             $entry->completed -= 1;
             $entry->save();
+            Log::debug("Count minus one completed task", ['date' => $date, 'task' => $event->data->event_data->content]);
         }
 
         if ($event->data->event_name === 'topir:migration') {
             $entry = Counts::firstOrCreate(['date' => $event->data->date]);
             $entry->completed += $event->data->completed;
             $entry->save();
+            Log::debug("Import existing statistic", ['date' => $event->data->date, 'completed' => $event->data->completed]);
         }
     }
 

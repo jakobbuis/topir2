@@ -102,6 +102,7 @@ class CountsProjectionTest extends TestCase
                 'event_data' => (object) [
                     'date_uncompleted' => '2020-01-01T08:00:00Z',
                     'priority' => 4,
+                    'content' => 'Some foo task',
                 ],
                 'event_name' => 'item:uncompleted',
             ],
@@ -117,6 +118,7 @@ class CountsProjectionTest extends TestCase
                 'event_data' => (object) [
                     'date_completed' => $date . 'T08:00:00Z',
                     'priority' => $priority,
+                    'content' => 'Some foo task',
                 ],
                 'event_name' => 'item:completed',
             ],

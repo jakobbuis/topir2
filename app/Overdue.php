@@ -3,6 +3,7 @@
 namespace App;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class Overdue extends Projection
 {
@@ -15,6 +16,7 @@ class Overdue extends Projection
             $entry = Overdue::firstOrCreate(['date' => $date]);
             $entry->count += $event->data->overdue;
             $entry->save();
+            Log::debug("Count completed task", ['date' => $date, 'task' => $event->data->overdue]);
         }
     }
 

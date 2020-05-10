@@ -32,6 +32,7 @@ class InitialProjectionTest extends TestCase
                 'event_data' => (object) [
                     'date_completed' => '2020-05-01T08:00:00Z',
                     'priority' => 1,
+                    'content' => 'Some foo task',
                 ],
                 'event_name' => 'item:completed',
             ],
