@@ -44,14 +44,17 @@ var todoistChart = new Chart(todoistElement, {
         datasets: [
             // Completed tasks per day (green)
             {
+                label: 'Completed',
                 backgroundColor: '#48BB78',
                 data: JSON.parse(todoistElement.dataset.completed),
             },
             {
+                label: 'Completed P1',
                 backgroundColor: '#2F855A',
                 data: JSON.parse(todoistElement.dataset.completedP1),
             },
             {
+                label: 'Left overdue',
                 backgroundColor: '#E53E3E',
                 data: JSON.parse(todoistElement.dataset.overdue).map(x => -x),
             },
