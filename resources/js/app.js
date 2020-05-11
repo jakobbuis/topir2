@@ -63,13 +63,11 @@ var todoistChart = new Chart(todoistElement, {
     options: {
         legend: { display: false },
         scales: {
-            xAxes: {
-                type: 'time',
-                time: {
-                    unit: 'day',
-                },
-            },
+            xAxes: [{
+                stacked: true,
+            }],
             yAxes: [{
+                stacked: true,
                 ticks: {
                     beginAtZero: true,
                 },
