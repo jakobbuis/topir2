@@ -77,6 +77,7 @@ var todoistChart = new Chart(todoistElement, {
             datalabels: {
                 anchor: 'start',
                 align: 'top',
+                color: 'white',
             },
         },
     }
