@@ -12,8 +12,11 @@ class Counts extends Projection
         if ($event->data->event_name === 'item:completed') {
             $date = (new Carbon($event->data->event_data->date_completed))->format('Y-m-d');
             $entry = Counts::firstOrCreate(['date' => $date]); // ensure the record exists
-            $entry->completed += 1;
-            $entry->completed_p1 += (int) $event->data->event_data->priority === 4;
+            if ($event->data->event_data->priority === 4) {
+                $entry->completed_p1 += 1;
+            } else {
+                $entry->completed += 1;
+            }
             $entry->save();
             Log::debug("Count completed task", ['date' => $date, 'task' => $event->data->event_data->content]);
         }

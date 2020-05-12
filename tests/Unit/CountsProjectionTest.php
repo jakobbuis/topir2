@@ -111,6 +111,24 @@ class CountsProjectionTest extends TestCase
         $this->assertEquals(1, Counts::first()->completed);
     }
 
+    /** @test */
+    public function p1ItemsAreCountedSeparatelyNotIncludedRegularCount()
+    {
+        Carbon::setTestNow('03-01-2020');
+
+        $this->createEvent('2020-01-01', 1);
+        $this->createEvent('2020-01-02', 4);
+
+        $this->assertEquals(
+            [
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
+            ],
+            Counts::last30Days()
+        );
+    }
+
     private function createEvent(string $date, int $priority): void
     {
         Event::create([
