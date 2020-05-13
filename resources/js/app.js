@@ -57,6 +57,10 @@ var todoistChart = new Chart(todoistElement, {
                 label: 'Left overdue',
                 backgroundColor: '#E53E3E',
                 data: JSON.parse(todoistElement.dataset.overdue).map(x => -x),
+                datalabels: {
+                    anchor: 'center',
+                    align: 'end',
+                },
             },
         ],
     },
