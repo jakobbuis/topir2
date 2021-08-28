@@ -27,7 +27,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command(CountOverdueTasks::class)->dailyAt('04:00');
-        $schedule->command(RehydrateProjections::class)->dailyAt('04:00');
+        $schedule->command(RehydrateProjections::class)->dailyAt('05:00');
     }
 
     /**
