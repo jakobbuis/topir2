@@ -11,7 +11,7 @@ abstract class Projection extends Model
 
     public static function rehydrate(): void
     {
-        // As all projects go back max 30 days, we need look back no further
+        // As all projections go back max 30 days, we need look back no further
         $beginningOfTime = Carbon::now()->subDays(35);
 
         static::truncate();
