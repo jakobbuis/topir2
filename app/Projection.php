@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 abstract class Projection extends Model
@@ -10,9 +11,13 @@ abstract class Projection extends Model
 
     public static function rehydrate(): void
     {
+        // As all projects go back max 30 days, we need look back no further
+        $beginningOfTime = Carbon::now()->subDays(35);
+
         static::truncate();
-        $events = Event::all()->each(function ($event) {
+
+        foreach (Event::where('created_at', '>=', $beginningOfTime)->lazy() as $event) {
             static::updateProjection($event);
-        });
+        }
     }
 }
