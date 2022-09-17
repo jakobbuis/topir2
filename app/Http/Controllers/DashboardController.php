@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Counts;
-use App\Overdue;
+use App\Models\Counts;
+use App\Models\Overdue;
 use Illuminate\View\View;
 
 class DashboardController extends Controller

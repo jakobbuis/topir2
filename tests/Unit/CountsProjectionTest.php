@@ -2,8 +2,8 @@
 
 namespace Tests\Unit;
 
-use App\Counts;
-use App\Event;
+use App\Models\Counts;
+use App\Models\Event;
 use Carbon\Carbon;
 use Tests\TestCase;
 
