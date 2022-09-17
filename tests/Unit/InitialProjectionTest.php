@@ -21,7 +21,7 @@ class InitialProjectionTest extends TestCase
             ],
         ]);
 
-        $this->assertEquals(3, Counts::where('date', '2020-05-01')->first()->completed);
+        $this->assertEquals(3, Counts::where('date', '2020-05-01')->first()->completed_p4);
     }
 
     /** @test */
@@ -47,7 +47,7 @@ class InitialProjectionTest extends TestCase
             ],
         ]);
 
-        $this->assertEquals(4, Counts::where('date', '2020-05-01')->first()->completed);
+        $this->assertEquals(4, Counts::where('date', '2020-05-01')->first()->completed_p4);
     }
 
     /** @test */

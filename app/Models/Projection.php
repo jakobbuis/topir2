@@ -14,7 +14,7 @@ abstract class Projection extends Model
         // As all projections go back max 30 days, we need look back no further
         $beginningOfTime = Carbon::now()->subDays(35);
 
-        static::truncate();
+        static::all()->each->delete();
 
         foreach (Event::where('created_at', '>=', $beginningOfTime)->lazy() as $event) {
             static::updateProjection($event);

@@ -35,7 +35,7 @@ class EventFactory extends Factory
                     'project_id' => 128501470,
                     'collapsed' => $this->faker->boolean(),
                 ],
-            ],
+            ],n
         ];
     }
 }

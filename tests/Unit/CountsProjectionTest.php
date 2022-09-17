@@ -24,7 +24,7 @@ class CountsProjectionTest extends TestCase
                 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
                 0, 0, 0, 0, 0, 0, 0, 1, 2, 0,
             ],
-            Counts::last30Days()
+            Counts::last30DaysP4()
         );
     }
 
@@ -36,15 +36,31 @@ class CountsProjectionTest extends TestCase
         // Prevent premature hydration
         \Illuminate\Support\Facades\Event::fake();
 
+        $this->createEvent('2020-01-02', 4);
+        $this->createEvent('2020-01-02', 3);
+        $this->createEvent('2020-01-02', 2);
         $this->createEvent('2020-01-02', 1);
         $this->createEvent('2020-01-02', 1);
+
+        $this->createEvent('2020-01-03', 1);
 
         $this->assertEquals(0, Counts::count());
 
         Counts::rehydrate();
 
         $this->assertEquals(1, Counts::where('date', '2020-01-02')->count());
-        $this->assertEquals(2, Counts::where('date', '2020-01-02')->first()->completed);
+        $dayOne = Counts::where('date', '2020-01-02')->first();
+        $this->assertEquals(1, $dayOne->completed_p1);
+        $this->assertEquals(1, $dayOne->completed_p2);
+        $this->assertEquals(1, $dayOne->completed_p3);
+        $this->assertEquals(2, $dayOne->completed_p4);
+
+        $this->assertEquals(1, Counts::where('date', '2020-01-03')->count());
+        $dayOne = Counts::where('date', '2020-01-03')->first();
+        $this->assertEquals(0, $dayOne->completed_p1);
+        $this->assertEquals(0, $dayOne->completed_p2);
+        $this->assertEquals(0, $dayOne->completed_p3);
+        $this->assertEquals(1, $dayOne->completed_p4);
     }
 
     /** @test */
@@ -53,7 +69,7 @@ class CountsProjectionTest extends TestCase
         Carbon::setTestNow('03-01-2020');
 
         $this->createEvent('2020-01-02', 1);
-        $this->createEvent('2020-01-02', 2);
+        $this->createEvent('2020-01-02', 4);
 
         $this->assertEquals(1, Counts::count());
 
@@ -65,37 +81,15 @@ class CountsProjectionTest extends TestCase
     }
 
     /** @test */
-    public function itRecordsP1CompletionsSeparately()
-    {
-        Carbon::setTestNow('03-01-2020');
-
-        $this->createEvent('2020-01-01', 1);
-        $this->createEvent('2020-01-01', 4);
-        $this->createEvent('2020-01-02', 2);
-        $this->createEvent('2020-01-02', 3);
-        $this->createEvent('2020-01-02', 4);
-        $this->createEvent('2020-01-02', 4);
-
-        $this->assertEquals(
-            [
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 1, 2, 0,
-            ],
-            Counts::last30DaysP1()
-        );
-    }
-
-    /** @test */
     public function itemsCanBeUncompleted()
     {
         Carbon::setTestNow('03-01-2020');
 
-        $this->createEvent('2020-01-01', 1);
-        $this->createEvent('2020-01-01', 1);
+        $this->createEvent('2020-01-01', 4);
+        $this->createEvent('2020-01-01', 4);
 
         $this->assertCount(1, Counts::all());
-        $this->assertEquals(2, Counts::first()->completed);
+        $this->assertEquals(2, Counts::first()->completed_p1);
 
         Event::create([
             'data' => (object) [
@@ -108,25 +102,7 @@ class CountsProjectionTest extends TestCase
             ],
         ]);
 
-        $this->assertEquals(1, Counts::first()->completed);
-    }
-
-    /** @test */
-    public function p1ItemsAreCountedSeparatelyNotIncludedRegularCount()
-    {
-        Carbon::setTestNow('03-01-2020');
-
-        $this->createEvent('2020-01-01', 1);
-        $this->createEvent('2020-01-02', 4);
-
-        $this->assertEquals(
-            [
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 1, 0, 0,
-            ],
-            Counts::last30Days()
-        );
+        $this->assertEquals(1, Counts::first()->completed_p1);
     }
 
     private function createEvent(string $date, int $priority): void
@@ -134,7 +110,7 @@ class CountsProjectionTest extends TestCase
         Event::create([
             'data' => (object) [
                 'event_data' => (object) [
-                    'date_completed' => $date.'T08:00:00Z',
+                    'date_completed' => $date . 'T08:00:00Z',
                     'priority' => $priority,
                     'content' => 'Some foo task',
                 ],

@@ -15,8 +15,10 @@
             <h1>Todoist completed and overdue</h1>
         </header>
         <canvas id="todoist" width="10" height="10"
-            data-completed="{{ json_encode($completed) }}"
             data-completed-p1="{{ json_encode($completed_p1) }}"
+            data-completed-p2="{{ json_encode($completed_p2) }}"
+            data-completed-p3="{{ json_encode($completed_p3) }}"
+            data-completed-p4="{{ json_encode($completed_p4) }}"
             data-overdue="{{ json_encode($overdue) }}"></canvas>
     </div>
 
