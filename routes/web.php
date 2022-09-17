@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Auth;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 // OAuth2 Todoist
