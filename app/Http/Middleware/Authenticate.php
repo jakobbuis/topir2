@@ -14,6 +14,5 @@ class Authenticate
         }
 
         return redirect(route('login'));
-
     }
 }

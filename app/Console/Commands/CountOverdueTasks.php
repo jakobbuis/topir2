@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 class CountOverdueTasks extends Command
 {
     protected $signature = 'tasks:count-overdue';
+
     protected $description = 'Count overdue tasks in the Todoist API';
 
     private $guzzle;
@@ -25,7 +26,7 @@ class CountOverdueTasks extends Command
     {
         // Find all overdue tasks in the Todoist API
         $token = config('services.todoist.api_token');
-        $response = $this->guzzle->get('https://api.todoist.com/rest/v1/tasks?filter=overdue&token=' . $token);
+        $response = $this->guzzle->get('https://api.todoist.com/rest/v1/tasks?filter=overdue&token='.$token);
         $data = json_decode((string) $response->getBody());
         $count = count($data);
 

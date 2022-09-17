@@ -134,7 +134,7 @@ class CountsProjectionTest extends TestCase
         Event::create([
             'data' => (object) [
                 'event_data' => (object) [
-                    'date_completed' => $date . 'T08:00:00Z',
+                    'date_completed' => $date.'T08:00:00Z',
                     'priority' => $priority,
                     'content' => 'Some foo task',
                 ],

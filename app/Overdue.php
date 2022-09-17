@@ -16,7 +16,7 @@ class Overdue extends Projection
             $entry = Overdue::firstOrCreate(['date' => $date]);
             $entry->count += $event->data->overdue;
             $entry->save();
-            Log::debug("Count completed task", ['date' => $date, 'task' => $event->data->overdue]);
+            Log::debug('Count completed task', ['date' => $date, 'task' => $event->data->overdue]);
         }
     }
 
