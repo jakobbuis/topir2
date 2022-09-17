@@ -2,8 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Counts;
-use App\Overdue;
+use App\Models\Counts;
+use App\Models\Overdue;
 use Illuminate\Console\Command;
 
 class RehydrateProjections extends Command

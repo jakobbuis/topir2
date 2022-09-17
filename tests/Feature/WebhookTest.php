@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Event;
+use App\Models\Event;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Config;
 use Tests\TestCase;

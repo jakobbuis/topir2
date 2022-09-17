@@ -2,8 +2,8 @@
 
 namespace Tests\Unit;
 
-use App\Event;
-use App\Overdue;
+use App\Models\Event;
+use App\Models\Overdue;
 use Carbon\Carbon;
 use Tests\TestCase;
 

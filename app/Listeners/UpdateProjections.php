@@ -2,9 +2,9 @@
 
 namespace App\Listeners;
 
-use App\Counts;
+use App\Models\Counts;
 use App\Events\EventCreated;
-use App\Overdue;
+use App\Models\Overdue;
 
 class UpdateProjections
 {

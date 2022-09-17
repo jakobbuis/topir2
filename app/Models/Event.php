@@ -1,6 +1,6 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use App\Events\EventCreated;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

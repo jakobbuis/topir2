@@ -2,9 +2,9 @@
 
 namespace Tests\Unit;
 
-use App\Counts;
-use App\Event;
-use App\Overdue;
+use App\Models\Counts;
+use App\Models\Event;
+use App\Models\Overdue;
 use Tests\TestCase;
 
 class InitialProjectionTest extends TestCase
