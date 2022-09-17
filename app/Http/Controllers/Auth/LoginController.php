@@ -17,6 +17,7 @@ class LoginController extends Controller
     {
         $user = Socialite::driver('todoist')->user();
         Session::put('current_user', $user);
+
         return redirect('/');
     }
 }

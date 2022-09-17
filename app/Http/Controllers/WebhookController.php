@@ -17,6 +17,7 @@ class WebhookController extends Controller
         $eventData = $this->completeEvent($request->all());
 
         Event::create(['data' => $eventData]);
+
         return response(null, 200);
     }
 
@@ -32,7 +33,7 @@ class WebhookController extends Controller
         // Verify the signature
         $secret = config('services.todoist.client_secret');
         $expectedSignature = base64_encode(hash_hmac('sha256', $request->getContent(), $secret, true));
-        if (!hash_equals($expectedSignature, $signature)) {
+        if (! hash_equals($expectedSignature, $signature)) {
             Log::warning('Rejected webhook payload with invalid signature', [
                 'payload' => $request->getContent(),
                 'signature_expected' => $expectedSignature,
@@ -46,12 +47,12 @@ class WebhookController extends Controller
     {
         // Completing a recurring tasks sets the `date_completed` parameter of the event to null
         // Insert the current datetime to fix that.
-        if (isset($event['event_name']) && $event['event_name'] ===  'item:completed') {
+        if (isset($event['event_name']) && $event['event_name'] === 'item:completed') {
             $event['event_data']['date_completed'] ??= Carbon::now()->toISO8601String();
         }
 
         // Uncompleting tasks events come without a date added
-        if (isset($event['event_name']) && $event['event_name'] ===  'item:uncompleted') {
+        if (isset($event['event_name']) && $event['event_name'] === 'item:uncompleted') {
             $event['event_data']['date_uncompleted'] ??= Carbon::now()->toISO8601String();
         }
 

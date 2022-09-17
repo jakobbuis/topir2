@@ -5,7 +5,6 @@ namespace App;
 use Laravel\Socialite\Two\AbstractProvider;
 use Laravel\Socialite\Two\ProviderInterface;
 use Laravel\Socialite\Two\User;
-use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class TodoistSocialiteProvider extends AbstractProvider implements ProviderInterface
 {
@@ -28,6 +27,6 @@ class TodoistSocialiteProvider extends AbstractProvider implements ProviderInter
 
     protected function mapUserToObject(array $user)
     {
-         return (new User())->setRaw($user);
+        return (new User())->setRaw($user);
     }
 }
