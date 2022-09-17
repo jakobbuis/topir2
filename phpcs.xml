@@ -1,0 +1,3 @@
+<ruleset name="coding-style">
+    <rule ref="PSR12"/>
+</ruleset>
