@@ -24,6 +24,7 @@ before('deploy:symlink', 'build:frontend');
 // Production
 host('production')
     ->setHostname('topir.jakobbuis.nl')
+    ->set('branch', 'main')
     ->set('remote_user', 'jakob')
     ->set('keep_releases', 3)
     ->set('deploy_path', '/srv/topir2/');
