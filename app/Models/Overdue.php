@@ -18,6 +18,14 @@ class Overdue extends Projection
             $entry->save();
             Log::debug('Count completed task', ['date' => $date, 'task' => $event->data->overdue]);
         }
+
+        if (in_array($event->data->event_name, ['topir:overdue-correction'])) {
+            $date = (new Carbon($event->data->date))->format('Y-m-d');
+            $entry = Overdue::firstOrCreate(['date' => $date]);
+            $entry->count = $event->data->overdue;
+            $entry->save();
+            Log::debug('Overdue correction', ['date' => $date, 'task' => $event->data->overdue]);
+        }
     }
 
     public static function last30Days(): array

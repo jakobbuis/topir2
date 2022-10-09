@@ -79,6 +79,31 @@ class OverdueProjectionTest extends TestCase
         );
     }
 
+    /** @test */
+    public function itCanProcessACorrectionEvent()
+    {
+        Carbon::setTestNow('03-01-2020');
+
+        $this->createEvent('2020-01-02', 2);
+
+        Event::create([
+            'data' => (object) [
+                'event_name' => 'topir:overdue-correction',
+                'date' => '2020-01-02',
+                'overdue' => 1,
+            ],
+        ]);
+
+        $this->assertEquals(
+            [
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+                0, 0, 0, 0, 0, 0, 0, 0, 1, 0,
+            ],
+            Overdue::last30Days()
+        );
+    }
+
     private function createEvent(string $date, $overdueCount): void
     {
         Event::create([
