@@ -14,7 +14,7 @@ class CorrectOverdue extends Command
 
     public function handle()
     {
-        Event::create([
+        $event = Event::create([
             'data' => [
                 'event_name' => 'topir:overdue-correction',
                 'date' => (new Carbon($this->argument('date')))->format('Y-m-d'),
@@ -22,7 +22,7 @@ class CorrectOverdue extends Command
             ],
         ]);
 
-        Overdue::rehydrate();
+        Overdue::updateProjection($event);
 
         return Command::SUCCESS;
     }
