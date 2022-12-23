@@ -26,7 +26,7 @@ class CountOverdueTasks extends Command
     {
         // Find all overdue tasks in the Todoist API
         $token = config('services.todoist.api_token');
-        $response = $this->guzzle->get('https://api.todoist.com/rest/v1/tasks?filter=overdue&token='.$token);
+        $response = $this->guzzle->get('https://api.todoist.com/rest/v2/tasks?filter=overdue&token='.$token);
         $data = json_decode((string) $response->getBody());
         $count = count($data);
 
